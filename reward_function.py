@@ -1,36 +1,79 @@
+import math
+
 def reward_function(params):
-  
-    
+    '''
+    Example of penalize steering, which helps mitigate zig-zag behaviors
+    '''
+
     # Read input parameters
-    track_width = params['track_width']
     distance_from_center = params['distance_from_center']
-    abs_steering = abs(params['steering_angle'])
+    steering_angle = params['steering_angle']
+    track_width = params['track_width']
     speed = params['speed']
+    is_left_of_center = params['is_left_of_center']
     is_offtrack = params['is_offtrack']
-    is_reversed = params['is_reversed']
+    closest_waypoints= params['closest_waypoints']
+    x = params['x']
+    y = params['y']
+    heading = params['heading']
+    all_wheels_on_track = params["all_wheels_on_track"]
+    waypoints = params["waypoints"]
+
+
+    next_point = waypoints[closest_waypoints[3]]
+    prev_point = waypoints[closest_waypoints[0]]
+    
+    reward = 1
+
+    track_direction = math.atan2(next_point[1]-prev_point[1],next_point[0]-prev_point[0])
+    track_direction = math.degrees(track_direction)
+    
+    direction_diff = abs(track_direction - heading)
+    if direction_diff < 2:
+
+        if  abs(steering_angle) > 3 :
+            reward  = 1e-3
+        elif speed <4:
+            reward -= (speed * (track_width/2 - distance_from_center))
+        else:
+            reward += (speed * (track_width/2 - distance_from_center))
+
+
+    elif direction_diff < 25:
+        
+        if is_left_of_center and  steering_angle <= 0 and steering_angle >= (2-direction_diff): 
+
+            if(steering_angle >= -10 and  speed >=4  and speed <= 4.5):
+                reward += speed
+            elif (steering_angle >= -15 and speed >=3  and speed < 4):
+                reward += speed
+            elif (steering_angle >= -20 and speed >=2  and speed < 3):
+                reward += speed
+            elif (steering_angle >= -25 and speed >=1.5  and speed < 2):
+                reward += speed
+            else :
+                reward =0.5
+ 
+        elif not is_left_of_center and  steering_angle >=0 and steering_angle <= (direction_diff - 2): 
+            if(steering_angle <=10 and  speed >=4  and speed <= 4.5):
+                reward += speed
+            elif (steering_angle >= 15 and speed >=3  and speed < 4):
+                reward += speed
+            elif (steering_angle >= 20 and speed >=2  and speed < 3):
+                reward += speed 
+            elif (steering_angle >= 25 and speed >=1.5  and speed < 2):
+                reward += speed
+            else :
+                reward =0.5   
+    
+        else :
+            reward = 0.5
+    
+    else :
+        reward =1e-3
 
     
-    if is_offtrack or is_reversed:
-        return 0
-
-    marker_1 = 0.1 * track_width
-    marker_2 = 0.25 * track_width
-    marker_3 = 0.5 * track_width
-
-    reward = speed*100
-
-    if distance_from_center <= marker_1:
-        reward += 100
-    elif distance_from_center <= marker_2:
-        reward += 50
-    elif distance_from_center <= marker_3:
-        reward += 10
-    else:
-        reward = 0  
-
-    ABS_STEERING_THRESHOLD = 20.0
-    if abs_steering > ABS_STEERING_THRESHOLD:
-        reward *= 0.8
-
-
-    return reward
+    if is_offtrack:
+        reward = 1e-3
+                        
+    return float(reward)
