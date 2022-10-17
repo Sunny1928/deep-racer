@@ -1,5 +1,4 @@
 def reward_function(params):
-    # Read input parameters
   
     track_width = params['track_width']
     distance_from_center = params['distance_from_center']
@@ -26,10 +25,5 @@ def reward_function(params):
             reward += 50  
     else:
         reward = 0.1
-
-    # ABS_STEERING_THRESHOLD = 20.0
-    # if abs_steering > ABS_STEERING_THRESHOLD:
-    #     reward *= 0.8
-
 
     return float(reward)
