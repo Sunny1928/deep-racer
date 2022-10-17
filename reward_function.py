@@ -11,10 +11,9 @@ def reward_function(params):
     speed = params['speed']
     is_offtrack = params['is_offtrack']
     is_reversed = params['is_reversed']
-    all_wheels_on_track = params['all_wheels_on_track']
 
     
-    if is_offtrack or is_reversed or (not all_wheels_on_track):
+    if is_offtrack or is_reversed :
         return 1e-3
 
     reward = speed*80
