@@ -1,36 +1,40 @@
+from tkinter import TRUE
+from turtle import distance
+
+
 def reward_function(params):
-  
-    
     # Read input parameters
+  
     track_width = params['track_width']
     distance_from_center = params['distance_from_center']
-    abs_steering = abs(params['steering_angle'])
+    is_left_of_center = params['is_left_of_center']
     speed = params['speed']
     is_offtrack = params['is_offtrack']
     is_reversed = params['is_reversed']
+    all_wheels_on_track = params['all_wheels_on_track']
 
     
-    if is_offtrack or is_reversed:
-        return 0
+    if is_offtrack or is_reversed or (not all_wheels_on_track):
+        return 1e-3
 
-    marker_1 = 0.1 * track_width
-    marker_2 = 0.25 * track_width
-    marker_3 = 0.5 * track_width
+    reward = speed*80
 
-    reward = speed*100
+    distance_from_left = track_width/2 - distance_from_center
 
-    if distance_from_center <= marker_1:
-        reward += 100
-    elif distance_from_center <= marker_2:
-        reward += 50
-    elif distance_from_center <= marker_3:
-        reward += 10
+    track_width_high = track_width/2*0.25
+    track_width_low = track_width/2*0.75
+
+    if is_left_of_center == TRUE:
+        if distance_from_left >= track_width_high and distance_from_left <= track_width_low:
+            reward += 100
+        else:
+            reward += 50  
     else:
-        reward = 0  
+        reward = 1e-3
 
-    ABS_STEERING_THRESHOLD = 20.0
-    if abs_steering > ABS_STEERING_THRESHOLD:
-        reward *= 0.8
+    # ABS_STEERING_THRESHOLD = 20.0
+    # if abs_steering > ABS_STEERING_THRESHOLD:
+    #     reward *= 0.8
 
 
     return reward
