@@ -1,7 +1,3 @@
-from tkinter import TRUE
-from turtle import distance
-
-
 def reward_function(params):
     # Read input parameters
   
@@ -13,8 +9,8 @@ def reward_function(params):
     is_reversed = params['is_reversed']
 
     
-    if is_offtrack or is_reversed :
-        return 1e-3
+    if is_offtrack or is_reversed:
+        return 0.1
 
     reward = speed*80
 
@@ -29,11 +25,11 @@ def reward_function(params):
         else:
             reward += 50  
     else:
-        reward = 1e-3
+        reward = 0.1
 
     # ABS_STEERING_THRESHOLD = 20.0
     # if abs_steering > ABS_STEERING_THRESHOLD:
     #     reward *= 0.8
 
 
-    return reward
+    return float(reward)
