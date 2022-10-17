@@ -23,7 +23,7 @@ def reward_function(params):
     track_width_high = track_width/2*0.25
     track_width_low = track_width/2*0.75
 
-    if is_left_of_center == TRUE:
+    if is_left_of_center == True:
         if distance_from_left >= track_width_high and distance_from_left <= track_width_low:
             reward += 100
         else:
