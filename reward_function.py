@@ -1,13 +1,13 @@
 def reward_function(params):
     # Read input parameters
   
-    track_width = params['track_width']
     distance_from_center = params['distance_from_center']
     is_left_of_center = params['is_left_of_center']
     speed = params['speed']
     is_offtrack = params['is_offtrack']
     is_reversed = params['is_reversed']
-
+    steps = params['steps']
+    progress = params['progress']
     
     if is_offtrack or is_reversed:
         return 0.1
@@ -22,8 +22,7 @@ def reward_function(params):
     else:
         reward -= distance_from_center*5 
 
-    steps = params['steps']
-    progress = params['progress']
+    
 
     TOTAL_NUM_STEPS = 200
 
