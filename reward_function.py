@@ -12,7 +12,7 @@ def reward_function(params):
     if is_offtrack or is_reversed:
         return 0.1
 
-    reward = speed*10
+    reward = speed*8
 
     
 
@@ -27,7 +27,7 @@ def reward_function(params):
     TOTAL_NUM_STEPS = 200
 
     if (steps % 100) == 0 and progress > (steps / TOTAL_NUM_STEPS) * 100 :
-        reward += 5
+        reward += 8
 
 
     return float(reward)
