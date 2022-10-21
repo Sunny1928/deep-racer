@@ -20,14 +20,14 @@ def reward_function(params):
         reward += distance_from_center*8 
 
     else:
-        reward -= distance_from_center*5 
+        reward -= distance_from_center*6
 
     
 
     TOTAL_NUM_STEPS = 200
 
     if (steps % 100) == 0 and progress > (steps / TOTAL_NUM_STEPS) * 100 :
-        reward += 8
+        reward += 9
 
 
     return float(reward)
